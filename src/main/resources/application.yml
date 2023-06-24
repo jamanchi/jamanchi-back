@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url:  jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=false
+    #jdbc:mariadb://localhost:3306/test
+    username: ${DB_USER_NAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
