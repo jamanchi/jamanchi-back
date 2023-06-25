@@ -12,3 +12,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+openai:
+  key: ${GPT_KEY}
+  dns: ${GPT_URL}
+  model: ${GPT_MODEL}
