@@ -36,7 +36,7 @@ public class AnswerService {
         Hobby hobbyInfo = hobbyRepository.findOne(hobbyId);
 
         List<AnswerResultDto> keywordRes = new ArrayList<>();
-        Integer[] keywordIds = {1, 2, 3, keywordId1, keywordId2};
+        Integer[] keywordIds = {keywordId1, keywordId2};
 
         for (Integer keywd: keywordIds) {
             if(!existsById(hobbyId, keywd)){
