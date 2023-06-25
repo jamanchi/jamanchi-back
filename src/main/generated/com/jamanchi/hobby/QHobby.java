@@ -26,12 +26,16 @@ public class QHobby extends EntityPathBase<Hobby> {
 
     public final NumberPath<Integer> id = createNumber("id", Integer.class);
 
+    public final StringPath image = createString("image");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
     public final StringPath name = createString("name");
 
     public final NumberPath<Integer> parentId = createNumber("parentId", Integer.class);
+
+    public final StringPath recommendId = createString("recommendId");
 
     public QHobby(String variable) {
         super(Hobby.class, forVariable(variable));

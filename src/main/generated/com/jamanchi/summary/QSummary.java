@@ -21,6 +21,8 @@ public class QSummary extends EntityPathBase<Summary> {
 
     public final com.jamanchi.commons.QBaseEntity _super = new com.jamanchi.commons.QBaseEntity(this);
 
+    public final StringPath category = createString("category");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
@@ -29,9 +31,7 @@ public class QSummary extends EntityPathBase<Summary> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
-    public final StringPath name = createString("name");
-
-    public final NumberPath<Long> value = createNumber("value", Long.class);
+    public final NumberPath<Integer> value = createNumber("value", Integer.class);
 
     public QSummary(String variable) {
         super(Summary.class, forVariable(variable));

@@ -21,6 +21,11 @@ public class Hobby extends BaseEntity {
     @Column(name = "parent_id")
     private Integer parentId;
 
+    @Column(name = "recommend_id")
+    private String recommendId;
+
+    private String image;
+
     public Hobby(String name, Integer parentId){
         this.name = name;
         this.parentId = parentId;
