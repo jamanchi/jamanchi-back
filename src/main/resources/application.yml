@@ -12,3 +12,16 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+  cloud:
+    gcp:
+      storage:
+        credentials:
+          location: classpath:${GCS_KEY}.json
+    project-id: ${GCS_PROJECT_ID}
+    bucket: ${GCS_BUCKET_NAME}
+
+openai:
+  key: ${GPT_KEY}
+  dns: ${GPT_URL}
+  model: ${GPT_MODEL}
