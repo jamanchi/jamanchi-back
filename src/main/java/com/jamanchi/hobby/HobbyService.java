@@ -49,16 +49,12 @@ public class HobbyService {
     }
 
     // 전체 대분류 취미 조회
+    @Transactional(readOnly = true)
     public List<HobbyResponseDto.All> findAllMainHobbies(){
-        List<HobbyResponseDto.All> results = hobbyRepository.findAllMainHobbies();
+        List<HobbyResponseDto.All> list = hobbyRepository.findAllMainHobbies();
+        setImageUrl(list);
 
-        String frontUrl = url + bucketName + "/";
-        for(HobbyResponseDto.All h : results){
-            if(h.getImage() == null)
-                continue;
-            h.setImageUrl(frontUrl);
-        }
-        return results;
+        return list;
     }
 
     // 전체 소분류 취미 조회
@@ -66,7 +62,6 @@ public class HobbyService {
     public PageResponseDto findAllSubHobbies(Pageable pageable){
 
         Page page = hobbyRepository.findAllSubHobbies(pageable);
-        System.out.println(page.getTotalPages() + ", isLast : " + page.isLast() + ", " + page.isFirst());
         return new PageResponseDto(page.getContent(), page.isLast());
     }
 
@@ -76,6 +71,15 @@ public class HobbyService {
         Integer parentId = findIdByName(parentName);
 
         return hobbyRepository.findSubHobbies(parentId);
+    }
+
+    // 고른 선택지에 따른 추천 취미 조회
+    @Transactional(readOnly = true)
+    public List<HobbyResponseDto.All> findRecommendHobbies(String recommendId){
+        List<HobbyResponseDto.All> list = hobbyRepository.findRecommendHobbies(recommendId);
+        setImageUrl(list);
+
+        return list;
     }
 
     @Transactional
@@ -114,5 +118,15 @@ public class HobbyService {
 
     private boolean existsByName(String name){
         return hobbyRepository.existsByName(name);
+    }
+
+    private void setImageUrl(List<HobbyResponseDto.All> list){
+        String frontUrl = url + bucketName + "/";
+
+        for(HobbyResponseDto.All h : list){
+            if(h.getImage() == null)
+                continue;
+            h.setImageUrl(frontUrl);
+        }
     }
 }

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,13 +20,14 @@ public class KeywordController {
 
     private final KeywordService keywordService;
 
-    @Operation(summary = "Create Keyword", description = "키워드 생성")
+    @Operation(summary = "키워드 생성", description = "새로운 키워드를 생성합니다.")
     @PostMapping
-    public void create(@RequestBody KeywordRequestDto.Create requestDto){
+    public ResponseEntity<Void> create(@RequestBody KeywordRequestDto.Create requestDto){
         keywordService.create(requestDto);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Operation(summary = "Get Keywords", description = "모든 키워드 조회")
+    @Operation(summary = "모든 키워드 조회", description = "모든 키워드를 조회합니다.")
     @GetMapping
     public ResponseEntity<List<KeywordResponseDto.Info>> getAll(){
         return ResponseEntity.ok(keywordService.getAll());

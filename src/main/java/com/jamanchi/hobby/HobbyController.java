@@ -24,31 +24,38 @@ public class HobbyController {
 
     private final HobbyService hobbyService;
 
-    @Operation(summary = "Create Hobby", description = "취미 생성")
+    @Operation(summary = "취미 생성", description = "새로운 취미를 생성합니다.")
     @PostMapping
-    public void create(@RequestBody HobbyRequestDto.Create requestDto){
+    public ResponseEntity<Void> create(@RequestBody HobbyRequestDto.Create requestDto){
         hobbyService.create(requestDto);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Operation(summary = "Find All MainHobbies", description = "전체 대분류 취미 조회")
+    @Operation(summary = "모든 대분류 취미 조회", description = "대분류에 해당하는 취미들을 모두 조회합니다.")
     @GetMapping("/main")
     public ResponseEntity<List<HobbyResponseDto.All>> findAllMainHobbies() {
         return ResponseEntity.ok(hobbyService.findAllMainHobbies());
     }
 
-    @Operation(summary = "Find All SubHobbies", description = "전체 소분류 취미 조회")
+    @Operation(summary = "모든 소분류 취미 조회", description = "소분류에 해당하는 취미들을 모두 조회합니다.")
     @GetMapping("/sub")
     public ResponseEntity<PageResponseDto> findAllSubHobbies(PageRequestDto requestDto){
         return ResponseEntity.ok(hobbyService.findAllSubHobbies(requestDto.of()));
     }
 
-    @Operation(summary = "Find SubHobbies", description = "특정 대분류에 속한 취미 조회")
+    @Operation(summary = "특정 대분류에 속한 소분류 취미 조회", description = "특정 대분류에 속한 소분류 취미들을 조회합니다.")
     @GetMapping("/{parentName}")
     public ResponseEntity<List<HobbyResponseDto.Info>> findSubHobbies(@PathVariable String parentName){
         return ResponseEntity.ok(hobbyService.findSubHobbies(parentName));
     }
 
-    @Operation(summary = "Update Image", description = "이미지 수정")
+    @Operation(summary = "고른 선택지에 따른 추천 취미 조회", description = "고른 선택지에 따른 5개의 추천 취미들을 조회합니다.")
+    @GetMapping("/recommend/{recommendId}")
+    public ResponseEntity<List<HobbyResponseDto.All>> findRecommendHobbies(@PathVariable String recommendId){
+        return ResponseEntity.ok(hobbyService.findRecommendHobbies(recommendId));
+    }
+
+    @Operation(summary = "취미의 이미지 수정", description = "취미에 해당하는 이미지 데이터를 수정합니다.")
     @PutMapping
     public ResponseEntity<Void> updateImage(@RequestPart HobbyRequestDto.UpdateImage requestDto
             , @RequestPart(value = "image", required = false) MultipartFile image) throws IOException {
@@ -56,9 +63,10 @@ public class HobbyController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete By Id", description = "Id로 취미 데이터 삭제")
+    @Operation(summary = "취미 삭제", description = "Id에 해당하는 취미를 삭제합니다.")
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Integer id){
+    public ResponseEntity<Void> deleteById(@PathVariable Integer id){
         hobbyService.deleteById(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
