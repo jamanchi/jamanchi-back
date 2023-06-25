@@ -1,11 +1,14 @@
 package com.jamanchi.hobby;
 
+import com.jamanchi.commons.dto.PageRequestDto;
+import com.jamanchi.commons.dto.PageResponseDto;
 import com.jamanchi.hobby.dto.HobbyRequestDto;
 import com.jamanchi.hobby.dto.HobbyResponseDto;
 import com.jamanchi.keyword.dto.KeywordResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,13 +28,20 @@ public class HobbyController {
         hobbyService.create(requestDto);
     }
 
-    @Operation(summary = "Find All", description = "전체 취미 조회")
-    @GetMapping
-    public ResponseEntity<List<HobbyResponseDto.Main>> findAll(){
-        return ResponseEntity.ok(hobbyService.findAll());
+
+    @Operation(summary = "Find All MainHobbies", description = "전체 대분류 취미 조회")
+    @GetMapping("/main")
+    public ResponseEntity<List<HobbyResponseDto.Info>> findAllMainHobbies() {
+        return ResponseEntity.ok(hobbyService.findAllMainHobbies());
     }
 
-    @Operation(summary = "Find SubHobbies", description = "소분류 취미 조회")
+    @Operation(summary = "Find All SubHobbies", description = "전체 소분류 취미 조회")
+    @GetMapping("/sub")
+    public ResponseEntity<PageResponseDto> findAllSubHobbies(PageRequestDto pageRequestDto){
+        return ResponseEntity.ok(hobbyService.findAllSubHobbies(pageRequestDto.of()));
+    }
+
+    @Operation(summary = "Find SubHobbies", description = "특정 대분류에 속한 취미 조회")
     @GetMapping("/{parentName}")
     public ResponseEntity<List<HobbyResponseDto.Info>> findSubHobbies(@PathVariable String parentName){
         return ResponseEntity.ok(hobbyService.findSubHobbies(parentName));

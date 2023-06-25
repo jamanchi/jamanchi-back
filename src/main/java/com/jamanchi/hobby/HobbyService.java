@@ -1,18 +1,15 @@
 package com.jamanchi.hobby;
 
+import com.jamanchi.commons.dto.PageResponseDto;
 import com.jamanchi.hobby.dto.HobbyRequestDto;
 import com.jamanchi.hobby.dto.HobbyResponseDto;
-import com.jamanchi.keyword.Keyword;
-import com.jamanchi.keyword.KeywordRepository;
-import com.jamanchi.keyword.dto.KeywordRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,30 +37,20 @@ public class HobbyService {
         hobbyRepository.save(hobby);
     }
 
-    @Transactional(readOnly = true)
-    public List<HobbyResponseDto.Main> findAll(){
-
-        // 모든 취미 정보들을 조회하고 대분류를 따로 분류
-        List<Hobby> hobbies = hobbyRepository.findAll();
-        if(hobbies.isEmpty())
-            return null;
-
-        List<HobbyResponseDto.Info> mainHobbies = getMainHobbies(hobbies);
-
-        // parentId 기준으로 취미 정보 매핑
-        Map<Integer, List<HobbyResponseDto.Info>> groupingByParent = hobbies.stream()
-                .map(c -> new HobbyResponseDto.Info(c.getId(), c.getName(), c.getParentId()))
-                .collect(Collectors.groupingBy(p -> p.getParentId()));
-
-        List<HobbyResponseDto.Main> mainList = new ArrayList<>();
-        for(HobbyResponseDto.Info i : mainHobbies){
-            HobbyResponseDto.Main main = new HobbyResponseDto.Main(i, groupingByParent.get(i.getId()));
-            mainList.add(main);
-        }
-
-        return mainList;
+    // 전체 대분류 취미 조회
+    public List<HobbyResponseDto.Info> findAllMainHobbies(){
+        return hobbyRepository.findAllMainHobbies();
     }
 
+    // 전체 소분류 취미 조회
+    @Transactional(readOnly = true)
+    public PageResponseDto findAllSubHobbies(Pageable pageable){
+
+        Page page = hobbyRepository.findAllSubHobbies(pageable);
+        return new PageResponseDto(page.getContent(), page.isLast());
+    }
+
+    // 특정 대분류에 속한 취미 조회
     @Transactional(readOnly = true)
     public List<HobbyResponseDto.Info> findSubHobbies(String parentName){
         Integer parentId = findIdByName(parentName);
@@ -88,20 +75,5 @@ public class HobbyService {
         return hobbyRepository.existsByName(name);
     }
 
-    // 모둔 취미 데이터 중 대분류만 반환
-    private List<HobbyResponseDto.Info> getMainHobbies(List<Hobby> hobbies){
-        List<HobbyResponseDto.Info> infos = new ArrayList<>();
 
-        for(Hobby h : hobbies){
-            if(h.getParentId() == 0){
-                infos.add(toInfo(h));
-            }
-        }
-
-        return infos;
-    }
-
-    private HobbyResponseDto.Info toInfo(Hobby hobby){
-        return new HobbyResponseDto.Info(hobby.getId(), hobby.getName(), hobby.getParentId());
-    }
 }
