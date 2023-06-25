@@ -10,23 +10,27 @@ public class HobbyResponseDto {
     public static class Info {
         private Integer id;
         private String name;
-        private String image;
 
-        public Info(Integer id, String name, String image) {
+        public Info(Integer id, String name) {
             this.id = id;
             this.name = name;
-            this.image = image;
         }
     }
 
     @Getter
-    public static class Main {
-        private Info main;
-        private List<Info> subList;
+    public static class All {
+        private Integer id;
+        private String name;
+        private String image;
 
-        public Main(Info main, List<Info> subList) {
-            this.main = main;
-            this.subList = subList;
+        public All(Integer id, String name, String image) {
+            this.id = id;
+            this.name = name;
+            this.image = image;
+        }
+
+        public void setImageUrl(String url){
+            image = url + image;
         }
     }
 }

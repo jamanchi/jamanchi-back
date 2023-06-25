@@ -26,6 +26,7 @@ public class HobbyService {
 
     @Value("${GCS_BUCKET_NAME}") // application.yml에 써둔 bucket 이름
     private String bucketName;
+    private String url = "https://storage.googleapis.com/";
 
     @Transactional
     public void create(HobbyRequestDto.Create request){
@@ -48,8 +49,16 @@ public class HobbyService {
     }
 
     // 전체 대분류 취미 조회
-    public List<HobbyResponseDto.Info> findAllMainHobbies(){
-        return hobbyRepository.findAllMainHobbies();
+    public List<HobbyResponseDto.All> findAllMainHobbies(){
+        List<HobbyResponseDto.All> results = hobbyRepository.findAllMainHobbies();
+
+        String frontUrl = url + bucketName + "/";
+        for(HobbyResponseDto.All h : results){
+            if(h.getImage() == null)
+                continue;
+            h.setImageUrl(frontUrl);
+        }
+        return results;
     }
 
     // 전체 소분류 취미 조회
@@ -105,6 +114,4 @@ public class HobbyService {
     private boolean existsByName(String name){
         return hobbyRepository.existsByName(name);
     }
-
-
 }

@@ -42,9 +42,9 @@ public class HobbyRepository {
     }
 
     // 전체 대분류 취미 조회
-    public List<HobbyResponseDto.Info> findAllMainHobbies(){
+    public List<HobbyResponseDto.All> findAllMainHobbies(){
         return queryFactory
-                .select(Projections.constructor(HobbyResponseDto.Info.class,
+                .select(Projections.constructor(HobbyResponseDto.All.class,
                         hobby.id,
                         hobby.name,
                         hobby.image
@@ -58,8 +58,7 @@ public class HobbyRepository {
         List<HobbyResponseDto.Info> contents = queryFactory
                 .select(Projections.constructor(HobbyResponseDto.Info.class,
                         hobby.id,
-                        hobby.name,
-                        hobby.image
+                        hobby.name
                 ))
                 .from(hobby)
                 .where(hobby.parentId.ne(0))

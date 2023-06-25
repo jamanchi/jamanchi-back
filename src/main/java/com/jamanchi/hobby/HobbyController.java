@@ -30,10 +30,9 @@ public class HobbyController {
         hobbyService.create(requestDto);
     }
 
-
     @Operation(summary = "Find All MainHobbies", description = "전체 대분류 취미 조회")
     @GetMapping("/main")
-    public ResponseEntity<List<HobbyResponseDto.Info>> findAllMainHobbies() {
+    public ResponseEntity<List<HobbyResponseDto.All>> findAllMainHobbies() {
         return ResponseEntity.ok(hobbyService.findAllMainHobbies());
     }
 
