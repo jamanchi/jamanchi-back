@@ -92,7 +92,7 @@ public class HobbyRepository {
         queryFactory
                 .update(hobby)
                 .set(hobby.image, image)
-                .where(hobby.name.eq(image))
+                .where(hobby.name.eq(name))
                 .execute();
     }
 

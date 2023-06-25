@@ -4,14 +4,16 @@ import com.jamanchi.commons.dto.PageRequestDto;
 import com.jamanchi.commons.dto.PageResponseDto;
 import com.jamanchi.hobby.dto.HobbyRequestDto;
 import com.jamanchi.hobby.dto.HobbyResponseDto;
-import com.jamanchi.keyword.dto.KeywordResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Tag(name="취미", description = "취미에 관한 API입니다.")
@@ -45,6 +47,13 @@ public class HobbyController {
     @GetMapping("/{parentName}")
     public ResponseEntity<List<HobbyResponseDto.Info>> findSubHobbies(@PathVariable String parentName){
         return ResponseEntity.ok(hobbyService.findSubHobbies(parentName));
+    }
+
+    @Operation(summary = "Update Image", description = "이미지 수정")
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateImage(@RequestPart("multipartFile") MultipartFile image) throws IOException {
+        hobbyService.updateImage(image);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @Operation(summary = "Delete By Id", description = "Id로 취미 데이터 삭제")
