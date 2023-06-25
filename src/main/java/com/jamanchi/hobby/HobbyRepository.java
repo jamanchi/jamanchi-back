@@ -97,6 +97,18 @@ public class HobbyRepository {
                 .fetch();
     }
 
+    public List<HobbyResponseDto.All> findRecommendHobbies(String recommendId){
+        return queryFactory
+                .select(Projections.constructor(HobbyResponseDto.All.class,
+                        hobby.id,
+                        hobby.name,
+                        hobby.image
+                ))
+                .from(hobby)
+                .where(hobby.recommendId.eq(recommendId))
+                .fetch();
+    }
+
     public void updateImage(String name, String image){
         queryFactory
                 .update(hobby)

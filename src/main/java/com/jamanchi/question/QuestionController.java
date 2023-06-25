@@ -4,6 +4,7 @@ import com.jamanchi.question.dto.QuestionRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,21 +18,23 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    @Operation(summary = "Create Question", description = "질문 생성")
+    @Operation(summary = "질문 생성", description = "새로운 질문을 생성합니다.")
     @PostMapping
-    public void create(@RequestBody QuestionRequestDto.Create requestDto){
+    public ResponseEntity<Void> create(@RequestBody QuestionRequestDto.Create requestDto){
         questionService.create(requestDto);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Operation(summary = "Get Questions", description = "모든 질문 조회")
+    @Operation(summary = "모든 질문 조회", description = "모든 질문을 조회합니다.")
     @GetMapping
     public ResponseEntity<List<String>> getAll(){
         return ResponseEntity.ok(questionService.getAll());
     }
 
-    @Operation(summary = "Delete All", description = "모든 질문 데이터 삭제")
+    @Operation(summary = "모든 질문 삭제", description = "모든 질문을 삭제합니다.")
     @DeleteMapping
-    public void deleteAll(){
+    public ResponseEntity<Void> deleteAll(){
         questionService.deleteAll();
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
