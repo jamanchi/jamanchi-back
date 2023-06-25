@@ -17,7 +17,6 @@ public class KeywordService {
     @Transactional
     public void create(KeywordRequestDto.Create request){
         Keyword keyword = request.toEntity();
-
         keywordRepository.save(keyword);
     }
 
