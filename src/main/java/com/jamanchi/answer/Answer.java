@@ -21,6 +21,7 @@ public class Answer extends BaseEntity {
     private Integer hobby_id;
     @NotNull
     private Integer keyword_id;
+    @Column(length=500)
     private String contents;
 
     public Answer(Integer hobby_id, Integer keyword_id, String contents) {
