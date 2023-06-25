@@ -25,6 +25,13 @@ public class HobbyRepository {
         entityManager.persist(entity);
     }
 
+    public Hobby findOne(Integer hobbyId){
+        return queryFactory
+                .selectFrom(hobby)
+                .where(hobby.id.eq(hobbyId))
+                .fetchOne();
+    }
+
     public Integer findIdByName(String name){
         return queryFactory
                 .select(hobby.id)

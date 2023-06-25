@@ -1,6 +1,9 @@
 package com.jamanchi.answer;
 
 import com.jamanchi.answer.dto.AnswerResponseDto;
+import com.jamanchi.answer.dto.AnswerResultDto;
+import com.jamanchi.hobby.Hobby;
+import com.jamanchi.hobby.HobbyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -13,10 +16,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +28,30 @@ public class AnswerService {
     @Value("${openai.model}")
     public static String MODEL;
     private final AnswerRepository answerRepository;
+    private final HobbyRepository hobbyRepository;
+
+    @Transactional(readOnly = true)
+    public AnswerResponseDto.DbResponse getAnswerDB(Integer hobbyId, Integer keywordId1, Integer keywordId2) {
+        // 취미 정보조회
+        Hobby hobbyInfo = hobbyRepository.findOne(hobbyId);
+
+        List<AnswerResultDto> keywordRes = new ArrayList<>();
+        Integer[] keywordIds = {1, 2, 3, keywordId1, keywordId2};
+
+        for (Integer keywd: keywordIds) {
+            if(!existsById(hobbyId, keywd)){
+                throw new IllegalArgumentException("존재하지 않는 답변입니다.");
+            }
+            AnswerResultDto keywordInfo = answerRepository.getAnswer2(hobbyId, keywd);
+            keywordRes.add(keywordInfo);
+        }
+
+        return new AnswerResponseDto.DbResponse(hobbyInfo.getName(),hobbyInfo.getImage(),keywordRes);
+    }
 
     @Transactional
-    public AnswerResponseDto getAnswer(Integer hobbyId, Integer keywordId) {
-        AnswerResponseDto prevAnswer = answerRepository.getAnswer(hobbyId, keywordId);
+    public AnswerResponseDto.GptResponse getAnswerGPT(Integer hobbyId, Integer keywordId) {
+        AnswerResponseDto.GptResponse prevAnswer = answerRepository.getAnswer(hobbyId, keywordId);
         if (prevAnswer == null) {
             try {
                 List<Map<String, String>> gptAnswer = (List<Map<String, String>>) Objects.requireNonNull(excuteGpt().getBody()).get("choices");
@@ -40,7 +60,7 @@ public class AnswerService {
                 Answer newAnswer = new Answer(hobbyId, keywordId, gptAns);
                 saveAnswer(newAnswer);
 
-                return new AnswerResponseDto(newAnswer.getId(), newAnswer.getHobby_id(), newAnswer.getKeyword_id(), newAnswer.getContents());
+                return new AnswerResponseDto.GptResponse(newAnswer.getId(), newAnswer.getHobby_id(), newAnswer.getKeyword_id(), newAnswer.getContents());
             } catch (Exception e) {
                 System.out.println("e = " + e);
             }
@@ -82,4 +102,9 @@ public class AnswerService {
     public void saveAnswer(Answer answer) {
         answerRepository.save(answer);
     }
+
+    private boolean existsById(Integer hobbyId, Integer keywordId){
+        return answerRepository.existsById(hobbyId, keywordId);
+    }
+
 }
