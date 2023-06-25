@@ -69,10 +69,9 @@ public class HobbyService {
     }
 
     @Transactional
-    public void updateImage(MultipartFile image) throws IOException {
+    public void updateImage(HobbyRequestDto.UpdateImage requestDto, MultipartFile image) throws IOException {
 
-        String name = "배드민턴";
-        if(!existsByName(name)){
+        if(!existsByName(requestDto.getName())){
             throw new IllegalArgumentException("존재하지 않는 취미입니다.");
         }
 
@@ -87,7 +86,7 @@ public class HobbyService {
                 image.getInputStream()
         );
 
-        hobbyRepository.updateImage(name, uuid);
+        hobbyRepository.updateImage(requestDto.getName(), uuid);
     }
 
     @Transactional

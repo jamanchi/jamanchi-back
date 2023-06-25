@@ -39,8 +39,8 @@ public class HobbyController {
 
     @Operation(summary = "Find All SubHobbies", description = "전체 소분류 취미 조회")
     @GetMapping("/sub")
-    public ResponseEntity<PageResponseDto> findAllSubHobbies(PageRequestDto pageRequestDto){
-        return ResponseEntity.ok(hobbyService.findAllSubHobbies(pageRequestDto.of()));
+    public ResponseEntity<PageResponseDto> findAllSubHobbies(PageRequestDto requestDto){
+        return ResponseEntity.ok(hobbyService.findAllSubHobbies(requestDto.of()));
     }
 
     @Operation(summary = "Find SubHobbies", description = "특정 대분류에 속한 취미 조회")
@@ -50,9 +50,10 @@ public class HobbyController {
     }
 
     @Operation(summary = "Update Image", description = "이미지 수정")
-    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateImage(@RequestPart("multipartFile") MultipartFile image) throws IOException {
-        hobbyService.updateImage(image);
+    @PutMapping
+    public ResponseEntity<Void> updateImage(@RequestPart HobbyRequestDto.UpdateImage requestDto
+            , @RequestPart(value = "image", required = false) MultipartFile image) throws IOException {
+        hobbyService.updateImage(requestDto, image);
         return new ResponseEntity(HttpStatus.OK);
     }
 
