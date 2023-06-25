@@ -6,19 +6,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Entity
+@Getter
 @RequiredArgsConstructor
 public class Answer extends BaseEntity {
-
     @Id
     @GeneratedValue
     @Column(name = "answer_id")
-    private Long id;
+    private Integer id;
     @NotNull
-    private Long hobby_id;
+    private Integer hobby_id;
     @NotNull
-    private Long keyword_id;
+    private Integer keyword_id;
     private String contents;
+
+    public Answer(Integer hobby_id, Integer keyword_id, String contents) {
+        this.hobby_id = hobby_id;
+        this.keyword_id = keyword_id;
+        this.contents = contents;
+    }
 }

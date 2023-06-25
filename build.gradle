@@ -20,9 +20,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
+	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 	implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
 	implementation 'org.glassfish:jakarta.el:4.0.2'
+
+	// GPT
+	implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
 
 	// QueryDSL, springboot 3.0.0 버전 이후로는 javax -> jakarta
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
