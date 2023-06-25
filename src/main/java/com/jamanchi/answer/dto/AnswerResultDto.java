@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public class AnswerResultDto {
-    private String kewyord;
-    private String dsecription;
+    private String keyword;
+    private String description;
 
-    public AnswerResultDto(String kewyord, String dsecription) {
-        this.kewyord = kewyord;
-        this.dsecription = dsecription;
+    public AnswerResultDto(String keyword, String description) {
+        this.keyword = keyword;
+        this.description = description;
     }
 }
