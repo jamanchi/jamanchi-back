@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/answer")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://port-0-jamanchi-back-7xwyjq992llj9hm2l9.sel4.cloudtype.app/", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class AnswerController {
     private final AnswerService answerService;
-    
+
     @GetMapping("")
     @Operation(summary = "답변 결과 조회", description = "취미정보를 토대로 db 데이터에 있는 답변을 받아옵니다. (가격, 필요물품, 소개 기본제공으로 추가 키워드id만 전달필요)")
     public ResponseEntity<AnswerResponseDto.DbResponse> getAnswerDB(@RequestParam Integer hobbyId, @RequestParam Integer keywordId1, @RequestParam Integer keywordId2) {
