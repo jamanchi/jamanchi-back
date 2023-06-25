@@ -10,12 +10,12 @@ public class HobbyResponseDto {
     public static class Info {
         private Integer id;
         private String name;
-        private Integer parentId;
+        private String image;
 
-        public Info(Integer id, String name, Integer parentId) {
+        public Info(Integer id, String name, String image) {
             this.id = id;
             this.name = name;
-            this.parentId = parentId;
+            this.image = image;
         }
     }
 
