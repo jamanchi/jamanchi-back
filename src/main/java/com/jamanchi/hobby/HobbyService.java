@@ -66,6 +66,7 @@ public class HobbyService {
     public PageResponseDto findAllSubHobbies(Pageable pageable){
 
         Page page = hobbyRepository.findAllSubHobbies(pageable);
+        System.out.println(page.getTotalPages() + ", isLast : " + page.isLast() + ", " + page.isFirst());
         return new PageResponseDto(page.getContent(), page.isLast());
     }
 

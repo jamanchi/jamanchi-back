@@ -71,26 +71,29 @@ public class HobbyRepository {
                 .where(hobby.parentId.ne(0))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .groupBy(hobby.name)
+                .orderBy(hobby.id.asc())
                 .fetch();
 
-        long total = queryFactory
-                .select(hobby.count())
+        List<Integer> total = queryFactory
+                .select(hobby.id)
                 .from(hobby)
-                .where(hobby.parentId.eq(0))
-                .fetchOne();
+                .where(hobby.parentId.ne(0))
+                .groupBy(hobby.name)
+                .fetch();
 
-        return new PageImpl<>(contents, pageable, total);
+        return new PageImpl<>(contents, pageable, total.size());
     }
 
     public List<HobbyResponseDto.Info> findSubHobbies(Integer parentId){
         return queryFactory
                 .select(Projections.constructor(HobbyResponseDto.Info.class,
                     hobby.id,
-                    hobby.name,
-                    hobby.parentId
+                    hobby.name
                 ))
                 .from(hobby)
                 .where(hobby.parentId.eq(parentId))
+                .groupBy(hobby.name)
                 .fetch();
     }
 
