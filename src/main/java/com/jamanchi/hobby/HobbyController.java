@@ -1,6 +1,7 @@
 package com.jamanchi.hobby;
 
 import com.jamanchi.commons.dto.PageRequestDto;
+import com.jamanchi.commons.dto.PageResponseDto;
 import com.jamanchi.hobby.dto.HobbyRequestDto;
 import com.jamanchi.hobby.dto.HobbyResponseDto;
 import com.jamanchi.keyword.dto.KeywordResponseDto;
@@ -36,7 +37,7 @@ public class HobbyController {
 
     @Operation(summary = "Find All SubHobbies", description = "전체 소분류 취미 조회")
     @GetMapping("/sub")
-    public ResponseEntity<Page<HobbyResponseDto.Info>> findAllSubHobbies(PageRequestDto pageRequestDto){
+    public ResponseEntity<PageResponseDto> findAllSubHobbies(PageRequestDto pageRequestDto){
         return ResponseEntity.ok(hobbyService.findAllSubHobbies(pageRequestDto.of()));
     }
 

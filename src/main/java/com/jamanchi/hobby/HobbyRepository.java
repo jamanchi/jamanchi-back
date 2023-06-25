@@ -88,6 +88,14 @@ public class HobbyRepository {
                 .fetch();
     }
 
+    public void updateImage(String name, String image){
+        queryFactory
+                .update(hobby)
+                .set(hobby.image, image)
+                .where(hobby.name.eq(image))
+                .execute();
+    }
+
     public void deleteById(Integer id){
         queryFactory
                 .delete(hobby)

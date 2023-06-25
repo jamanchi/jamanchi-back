@@ -1,5 +1,6 @@
 package com.jamanchi.hobby;
 
+import com.jamanchi.commons.dto.PageResponseDto;
 import com.jamanchi.hobby.dto.HobbyRequestDto;
 import com.jamanchi.hobby.dto.HobbyResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +44,10 @@ public class HobbyService {
 
     // 전체 소분류 취미 조회
     @Transactional(readOnly = true)
-    public Page<HobbyResponseDto.Info> findAllSubHobbies(Pageable pageable){
-        return hobbyRepository.findAllSubHobbies(pageable);
+    public PageResponseDto findAllSubHobbies(Pageable pageable){
+
+        Page page = hobbyRepository.findAllSubHobbies(pageable);
+        return new PageResponseDto(page.getContent(), page.isLast());
     }
 
     // 특정 대분류에 속한 취미 조회

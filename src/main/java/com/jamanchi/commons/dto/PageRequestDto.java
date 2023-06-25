@@ -1,6 +1,5 @@
 package com.jamanchi.commons.dto;
 
-import lombok.Getter;
 import org.springframework.data.domain.PageRequest;
 
 public class PageRequestDto {
