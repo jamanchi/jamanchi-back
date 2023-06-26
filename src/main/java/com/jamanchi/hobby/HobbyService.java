@@ -50,8 +50,8 @@ public class HobbyService {
 
     // 전체 대분류 취미 조회
     @Transactional(readOnly = true)
-    public List<HobbyResponseDto.All> findAllMainHobbies(){
-        List<HobbyResponseDto.All> list = hobbyRepository.findAllMainHobbies();
+    public List<HobbyResponseDto.Info> findAllMainHobbies(){
+        List<HobbyResponseDto.Info> list = hobbyRepository.findAllMainHobbies();
         setImageUrl(list);
 
         return list;
@@ -60,8 +60,9 @@ public class HobbyService {
     // 전체 소분류 취미 조회
     @Transactional(readOnly = true)
     public PageResponseDto findAllSubHobbies(Pageable pageable){
-
         Page page = hobbyRepository.findAllSubHobbies(pageable);
+        setImageUrl(page.getContent());
+
         return new PageResponseDto(page.getContent(), page.isLast());
     }
 
@@ -69,14 +70,16 @@ public class HobbyService {
     @Transactional(readOnly = true)
     public List<HobbyResponseDto.Info> findSubHobbies(String parentName){
         Integer parentId = findIdByName(parentName);
+        List<HobbyResponseDto.Info> list = hobbyRepository.findSubHobbies(parentId);
+        setImageUrl(list);
 
-        return hobbyRepository.findSubHobbies(parentId);
+        return list;
     }
 
     // 고른 선택지에 따른 추천 취미 조회
     @Transactional(readOnly = true)
-    public List<HobbyResponseDto.All> findRecommendHobbies(String recommendId){
-        List<HobbyResponseDto.All> list = hobbyRepository.findRecommendHobbies(recommendId);
+    public List<HobbyResponseDto.Info> findRecommendHobbies(String recommendId){
+        List<HobbyResponseDto.Info> list = hobbyRepository.findRecommendHobbies(recommendId);
         setImageUrl(list);
 
         return list;
@@ -120,10 +123,10 @@ public class HobbyService {
         return hobbyRepository.existsByName(name);
     }
 
-    private void setImageUrl(List<HobbyResponseDto.All> list){
+    private void setImageUrl(List<HobbyResponseDto.Info> list){
         String frontUrl = url + bucketName + "/";
 
-        for(HobbyResponseDto.All h : list){
+        for(HobbyResponseDto.Info h : list){
             if(h.getImage() == null)
                 continue;
             h.setImageUrl(frontUrl);

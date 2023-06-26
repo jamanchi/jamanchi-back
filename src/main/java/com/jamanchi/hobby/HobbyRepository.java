@@ -49,9 +49,9 @@ public class HobbyRepository {
     }
 
     // 전체 대분류 취미 조회
-    public List<HobbyResponseDto.All> findAllMainHobbies(){
+    public List<HobbyResponseDto.Info> findAllMainHobbies(){
         return queryFactory
-                .select(Projections.constructor(HobbyResponseDto.All.class,
+                .select(Projections.constructor(HobbyResponseDto.Info.class,
                         hobby.id,
                         hobby.name,
                         hobby.image
@@ -65,7 +65,8 @@ public class HobbyRepository {
         List<HobbyResponseDto.Info> contents = queryFactory
                 .select(Projections.constructor(HobbyResponseDto.Info.class,
                         hobby.id,
-                        hobby.name
+                        hobby.name,
+                        hobby.image
                 ))
                 .from(hobby)
                 .where(hobby.parentId.ne(0))
@@ -89,7 +90,8 @@ public class HobbyRepository {
         return queryFactory
                 .select(Projections.constructor(HobbyResponseDto.Info.class,
                     hobby.id,
-                    hobby.name
+                    hobby.name,
+                    hobby.image
                 ))
                 .from(hobby)
                 .where(hobby.parentId.eq(parentId))
@@ -97,9 +99,9 @@ public class HobbyRepository {
                 .fetch();
     }
 
-    public List<HobbyResponseDto.All> findRecommendHobbies(String recommendId){
+    public List<HobbyResponseDto.Info> findRecommendHobbies(String recommendId){
         return queryFactory
-                .select(Projections.constructor(HobbyResponseDto.All.class,
+                .select(Projections.constructor(HobbyResponseDto.Info.class,
                         hobby.id,
                         hobby.name,
                         hobby.image

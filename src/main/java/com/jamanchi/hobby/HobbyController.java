@@ -33,7 +33,7 @@ public class HobbyController {
 
     @Operation(summary = "모든 대분류 취미 조회", description = "대분류에 해당하는 취미들을 모두 조회합니다.")
     @GetMapping("/main")
-    public ResponseEntity<List<HobbyResponseDto.All>> findAllMainHobbies() {
+    public ResponseEntity<List<HobbyResponseDto.Info>> findAllMainHobbies() {
         return ResponseEntity.ok(hobbyService.findAllMainHobbies());
     }
 
@@ -51,7 +51,7 @@ public class HobbyController {
 
     @Operation(summary = "고른 선택지에 따른 추천 취미 조회", description = "고른 선택지에 따른 5개의 추천 취미들을 조회합니다.")
     @GetMapping("/recommend/{recommendId}")
-    public ResponseEntity<List<HobbyResponseDto.All>> findRecommendHobbies(@PathVariable String recommendId){
+    public ResponseEntity<List<HobbyResponseDto.Info>> findRecommendHobbies(@PathVariable String recommendId){
         return ResponseEntity.ok(hobbyService.findRecommendHobbies(recommendId));
     }
 
