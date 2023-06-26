@@ -31,6 +31,12 @@ public class HobbyController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @Operation(summary = "Id로 취미 조회", description = "Id에 해당하는 취미를 조회합니다.")
+    @GetMapping("/{id}")
+    public ResponseEntity<HobbyResponseDto.Info> findById(@PathVariable Integer id) {
+        return ResponseEntity.ok(hobbyService.findById(id));
+    }
+
     @Operation(summary = "모든 대분류 취미 조회", description = "대분류에 해당하는 취미들을 모두 조회합니다.")
     @GetMapping("/main")
     public ResponseEntity<List<HobbyResponseDto.Info>> findAllMainHobbies() {
@@ -44,7 +50,7 @@ public class HobbyController {
     }
 
     @Operation(summary = "특정 대분류에 속한 소분류 취미 조회", description = "특정 대분류에 속한 소분류 취미들을 조회합니다.")
-    @GetMapping("/{parentName}")
+    @GetMapping("/main/{parentName}")
     public ResponseEntity<List<HobbyResponseDto.Info>> findSubHobbies(@PathVariable String parentName){
         return ResponseEntity.ok(hobbyService.findSubHobbies(parentName));
     }

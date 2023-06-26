@@ -48,11 +48,23 @@ public class HobbyService {
         hobbyRepository.save(hobby);
     }
 
+    @Transactional(readOnly = true)
+    public HobbyResponseDto.Info findById(Integer id){
+        HobbyResponseDto.Info info = hobbyRepository.findById(id);
+
+        if(info == null){
+            throw new IllegalArgumentException("존재하지 않는 취미입니다.");
+        }
+
+        setImageUrl(info);
+        return info;
+    }
+
     // 전체 대분류 취미 조회
     @Transactional(readOnly = true)
     public List<HobbyResponseDto.Info> findAllMainHobbies(){
         List<HobbyResponseDto.Info> list = hobbyRepository.findAllMainHobbies();
-        setImageUrl(list);
+        setImageListUrl(list);
 
         return list;
     }
@@ -61,7 +73,7 @@ public class HobbyService {
     @Transactional(readOnly = true)
     public PageResponseDto findAllSubHobbies(Pageable pageable){
         Page page = hobbyRepository.findAllSubHobbies(pageable);
-        setImageUrl(page.getContent());
+        setImageListUrl(page.getContent());
 
         return new PageResponseDto(page.getContent(), page.isLast());
     }
@@ -71,7 +83,7 @@ public class HobbyService {
     public List<HobbyResponseDto.Info> findSubHobbies(String parentName){
         Integer parentId = findIdByName(parentName);
         List<HobbyResponseDto.Info> list = hobbyRepository.findSubHobbies(parentId);
-        setImageUrl(list);
+        setImageListUrl(list);
 
         return list;
     }
@@ -80,7 +92,7 @@ public class HobbyService {
     @Transactional(readOnly = true)
     public List<HobbyResponseDto.Info> findRecommendHobbies(String recommendId){
         List<HobbyResponseDto.Info> list = hobbyRepository.findRecommendHobbies(recommendId);
-        setImageUrl(list);
+        setImageListUrl(list);
 
         return list;
     }
@@ -123,13 +135,22 @@ public class HobbyService {
         return hobbyRepository.existsByName(name);
     }
 
-    private void setImageUrl(List<HobbyResponseDto.Info> list){
+    private void setImageListUrl(List<HobbyResponseDto.Info> infoList){
         String frontUrl = url + bucketName + "/";
 
-        for(HobbyResponseDto.Info h : list){
-            if(h.getImage() == null)
+        for(HobbyResponseDto.Info i : infoList){
+            if(i.getImage() == null)
                 continue;
-            h.setImageUrl(frontUrl);
+            i.setImageUrl(frontUrl);
         }
+    }
+
+    private void setImageUrl(HobbyResponseDto.Info info){
+
+        if(info.getImage() == null)
+            return;
+
+        String frontUrl = url + bucketName + "/";
+        info.setImageUrl(frontUrl);
     }
 }

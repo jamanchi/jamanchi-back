@@ -2,6 +2,7 @@ package com.jamanchi.hobby;
 
 import com.jamanchi.hobby.dto.HobbyResponseDto;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,18 @@ public class HobbyRepository {
                 .from(hobby)
                 .where(hobby.name.eq(name))
                 .fetchFirst() != null;
+    }
+
+    public HobbyResponseDto.Info findById(Integer id){
+        return queryFactory
+                .select(Projections.constructor(HobbyResponseDto.Info.class,
+                        Expressions.asNumber(id).as("id"),
+                        hobby.name,
+                        hobby.image
+                ))
+                .from(hobby)
+                .where(hobby.id.eq(id))
+                .fetchOne();
     }
 
     // 전체 대분류 취미 조회
