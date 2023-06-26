@@ -39,6 +39,9 @@ public class AnswerService {
         Integer[] keywordIds = {keywordId1, keywordId2};
 
         for (Integer keywd: keywordIds) {
+            if (keywd == 0) {
+                continue;
+            }
             if(!existsById(hobbyId, keywd)){
                 throw new IllegalArgumentException("존재하지 않는 답변입니다.");
             }
