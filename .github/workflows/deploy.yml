@@ -32,11 +32,23 @@ jobs:
                 - name: DB_PORT
                   value: "3306"
                 - name: DB_NAME
-                  value: jamanch
+                  value: jamanchi
                 - name: DB_USER_NAME
                   value: root
                 - name: DB_PASSWORD
-                  value: "1234"
+                  value: admin
+                - name: GPT_KEY
+                  value: ${{ secrets.OPENAI_KEY }}
+                - name: GPT_MODEL
+                  value: text-davinci-003
+                - name: GPT_URL
+                  value: https://api.openai.com/v1/completions
+                - name: GCS_PROJECT_ID
+                  value: augmented-form-390911
+                - name: GCS_BUCKET_NAME
+                  value: jamanchi_bucket
+                - name: GCS_KEY
+                  value: ${{ secrets.GCS_KEY }}
             context:
               git:
                 url: git@github.com:${{ github.repository }}.git
